@@ -1,0 +1,15 @@
+5. Create a report featuring top 5 products, ranked by Incremental Revenue Percentage (IR%), across all campaigns
+
+SELECT 
+    dp.product_name,
+    dp.category,
+    ROUND(
+        (SUM(fe.base_price * fe.`quantity_sold(after_promo)`) - SUM(fe.base_price * fe.`quantity_sold(before_promo)`)) / 
+        SUM(fe.base_price * fe.`quantity_sold(before_promo)`) * 100, 
+        2
+    ) AS IR_percentage
+FROM fact_events fe
+JOIN dim_products dp ON fe.product_code = dp.product_code
+GROUP BY dp.product_name, dp.category
+ORDER BY IR_percentage DESC
+LIMIT 5;
