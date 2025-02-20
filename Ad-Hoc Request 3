@@ -1,0 +1,12 @@
+3. Provide a report that displays each campaign along with total revenue generated before and after campaign.
+
+SELECT 
+    dc.campaign_name,
+    SUM(fe.base_price * fe.`quantity_sold(before_promo)`) AS total_revenue_before_promo,
+    SUM(fe.base_price * fe.`quantity_sold(after_promo)`) AS total_revenue_after_promo
+FROM 
+    fact_events fe
+JOIN 
+    dim_campaigns dc ON fe.campaign_id = dc.campaign_id
+GROUP BY 
+    dc.campaign_name;
